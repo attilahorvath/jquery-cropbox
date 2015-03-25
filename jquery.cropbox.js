@@ -251,6 +251,15 @@
       getBlob: function () {
         return uri2blob(this.getDataURL());
       },
+      getDataURLWithPica: function(callback) {
+        var srcCanvas = document.createElement('canvas'), destCanvas = document.createElement('canvas'), ctx = srcCanvas.getContext('2d');
+        srcCanvas.width = this.result.cropW;
+        srcCanvas.height = this.result.cropH;
+        destCanvas.width = this.options.width;
+        destCanvas.height = this.options.height;
+        ctx.drawImage(this.$image.get(0), this.result.cropX, this.result.cropY, this.result.cropW, this.result.cropH, 0, 0, this.result.cropW, this.result.cropH);
+        pica.resizeCanvas(srcCanvas, destCanvas, {}, function() { callback(destCanvas.toDataURL()); });
+      },
     };
 
     $.fn[pluginName] = function(options, on_load) {
